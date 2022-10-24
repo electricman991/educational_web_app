@@ -7,22 +7,20 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="{% url 'polls:vote' question.id %}" method="post">
+    <form action="{$ url 'polls:answers' question.id %}" method="post">
         {% csrf_token %}
         <fieldset>
-            <legend><h1>{{ question.question_text }}</h1></legend>
+            <legend><h1>{{ subject.subject_text }}</h1></legend>
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-            {% for choice in question.choice_set.all %}
-                <!--<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}"> -->
+            {% for choice in subject.question_set.all %}
                 
-                {% if choice.answer_text == '' %}
-                <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br> 
+                <!--<input type="radio" name="answer_choice" id="answer_choice{{ forloop.counter }}" value="{{ answer.id }}">-->
+                <p>{{ choice.question_text }}</p><br>
                 
-                {% else %}
-                
-                <input type="radio" name="answer_choice" id="answer_choice{{ forloop.counter }}" value="{{ answer.id }}">
-                <label for="choice{{ forloop.counter }}">{{ choice.answer_text }}</label><br>
-                {% endif %}
+                {% for answer in choice.answer_set.all %}
+                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                    <label for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br>
+                {% endfor %}
             {% endfor %}
         </fieldset>
         <input type="submit" value="See Answers">

@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-key_path = "key.secret"
+key_path = "quiz/key.secret"
 if os.path.isfile(key_path):
     text_file = open(key_path, "r")
     SECRET_KEY = text_file.read()
