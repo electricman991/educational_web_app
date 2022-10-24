@@ -1,6 +1,4 @@
-import datetime
 from django.db import models
-from django.utils import timezone
 
 class Subject(models.Model):
     subject_text = models.CharField(max_length=200)
