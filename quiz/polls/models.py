@@ -7,18 +7,18 @@ class Answer(models.Model):
     answer_text = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.answer_text
+        return self.subject_text
 
 
-# The question must be phrased and written in less than 200 characters of text.
-# The correct_answer will be pulled along with 3 decoy answers.
 class Question(models.Model):
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     question_text = models.CharField(max_length=200)
-    correct_answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
-
+    answers = models.CharField(max_length=200)
     def __str__(self):
-        return self.question_text
-    
-    def _get_correct_answer(self):
-        return self.correct_answer
+        return self.question_text + self.answers
 
+class Answer(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    answer_text = models.CharField(max_length=200)
+    def __str__(self):
+        return self.answer_text
