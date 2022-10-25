@@ -1,7 +1,38 @@
 li {
-    font-size: 50px;
+    font-size: 40px;
+    text-align: justify;
+    list-style-position: inside;
+    padding: 20px;
+    margin-left: 330px;
 }
 
-a {
-    font-size: 50px;
+button {
+    font-size: 25px;
+    padding: 15px;
+    
+}
+
+
+#title {
+    font-size: 100px;
+    margin: auto;
+    text-align: center;
+    font-family: copperplate;
+    padding-top: 20px;
+}
+
+#subheading {
+    font-size: 30px;
+    font-style: italic;
+    margin: auto;
+    text-align: center;
+    padding: 20px;
+    font-family: Arial;
+}
+
+#instruction {
+    font-size: 30px;
+    margin-left: 280px;
+    padding-top:20px;
+    font-family: Arial; 
 }
