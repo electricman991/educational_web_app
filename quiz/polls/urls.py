@@ -8,5 +8,6 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('<int:pk>/', views.DetailView.as_view(), name='detail'),
     path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
-    path('<int:question_id>/answers/', views.answers, name='answers'),
+    path('answers/<int:pk>/', views.seeAllAnswers.as_view(), name='answers'),
+    path('answers/', views.seeAllAnswers.as_view(), name='allAnswers')
 ]
