@@ -5,25 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
+    <link rel="stylesheet" href="{% static 'detail.css'%}" />
     <title>Document</title>
 </head>
 <body>
     <form action="{$ url 'polls:answers' question.id %}" method="post">
         {% csrf_token %}
         <fieldset>
-            <legend><h1>{{ subject.subject_text }}</h1></legend>
+            <legend id="topic"><h1 id="topic">{{ subject.subject_text }}</h1></legend>
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
             {% with count=1 %}
-            
+
             {% for choice in subject.question_set.all %}
-                
+
                 {% with count=count|add:1 %}
-                
+
                 <p>Question{{ count }}/10</p>
-                
+
                 <!--<input type="radio" name="answer_choice" id="answer_choice{{ forloop.counter }}" value="{{ answer.id }}">-->
                 <p>{{ choice.question_text }}</p><br>
-                
+
                 {% if choice.question_text == "What must a rectangle have to make it a rectangle?"%}
                     <p>A: Four sides</p>
                     <p>B: Four right angles</p>
@@ -35,20 +36,22 @@
                 {% elif choice.question_text == "Use f(x) and g(x) to find g(x) - f(x)."%} 
                     <p>Here, f(x) = -x + 5 and g(x) = 3x + 2.</p>
                 {% endif %}
-                
+                <p id="questions">{{ choice.question_text }}</p><br>
+
                 {% for answer in choice.answer_set.all %}
                     <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
                     <label for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br>
+                    <label id="answers" for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br>
                 {% endfor %}
                 {% endwith %}
             {% endfor %}
-            
+
             {% endwith %}
         </fieldset>
-        <input type="submit" value="See Answers">
+        <input type="submit" value="Submit">
+        <input type="submit" value="Next">
     
     </form>
 </body>
 </html>
-
 
