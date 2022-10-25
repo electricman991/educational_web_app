@@ -1,9 +1,30 @@
-{% if latest_question_list %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index.css'%}" />
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="title">
+        inQUIZitor
+    </h1>
+    <h2 id="subheading">
+        Practice Questions<br>for<br>Middle Schoolers
+    </h2>
+    <p id="instruction">Select a subject you'd like to practice:</p>
+    {% if latest_question_list %}
     <ul>
-    {% for question in latest_question_list %}
-    <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+    {% for subject in latest_question_list %}
+    <li><a href="{% url 'polls:detail' subject.id %}"><button>{{ subject.subject_text }}</button></a></li>
     {% endfor %}
     </ul>
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
+</body>
+</html>
+
