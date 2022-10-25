@@ -9,10 +9,17 @@
     <title>Document</title>
 </head>
 <body>
+    <h1 id="title">
+        inQUIZitor
+    </h1>
+    <h2 id="subheading">
+        Practice Questions<br>for<br>Middle Schoolers
+    </h2>
+    <p id="instruction">Select a subject you'd like to practice:</p>
     {% if latest_question_list %}
     <ul>
     {% for subject in latest_question_list %}
-    <li><a href="{% url 'polls:detail' subject.id %}">{{ subject.subject_text }}</a></li>
+    <li><a href="{% url 'polls:detail' subject.id %}"><button>{{ subject.subject_text }}</button></a></li>
     {% endfor %}
     </ul>
 {% else %}
