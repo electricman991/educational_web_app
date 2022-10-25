@@ -11,16 +11,16 @@
         {% csrf_token %}
         <fieldset>
             <legend><h1>{{ subject.subject_text }}</h1></legend>
-            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+            {% if error_message %}<p>Consider this marker 4.5, also error: <strong>{{ error_message }}</strong></p>{% endif %}
             {% for choice in subject.question_set.all %}
-                <p>This is a test marker, is the loop running?</p>
                 <!--<input type="radio" name="answer_choice" id="answer_choice{{ forloop.counter }}" value="{{ answer.id }}">-->
-                <p>{{ choice.question_text }}</p><br>
+                <h4>{{ choice.question_text }}</h4>
+                <p>The correct answer is: {{ choice.answers }}</p><br>
                 
-                {% for answer in choice.answer_set.all %}
+                <!--{% for answer in choice.answer_set.all %}
                     <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
                     <label for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br>
-                {% endfor %}
+                {% endfor %}-->
             {% endfor %}
         </fieldset>
         <input type="submit" value="See Answers">
@@ -28,5 +28,4 @@
     </form>
 </body>
 </html>
-
 
