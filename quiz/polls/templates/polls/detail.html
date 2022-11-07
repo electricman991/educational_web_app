@@ -16,14 +16,14 @@
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
             {% with count=1 %}
 
-            {% for choice in subject.question_set.all %}
+            {% for choice in question_list %}
 
-                {% with count=count|add:1 %}
-
-                <p>Question{{ count }}/10</p>
+                <!--{% with count=count|add:1 %} -->
+                <p>Question{{ forloop.counter }}/10</p> 
 
                 <!--<input type="radio" name="answer_choice" id="answer_choice{{ forloop.counter }}" value="{{ answer.id }}">-->
-                <p>{{ choice.question_text }}</p><br>
+                <!--<p>{{ choice.question_text }}</p><br> -->
+                <p id="questions">{{ choice.question_text }}</p><br>
 
                 {% if choice.question_text == "What must a rectangle have to make it a rectangle?"%}
                     <p>A: Four sides</p>
@@ -31,17 +31,21 @@
                     <p>C: Three equal sides</p>
                     <p>D: Four equal angles</p>
                 {% elif choice.question_text == "Josh claims that these triangles are similar by SSS. Do you agree or disagree with Josh?"%}
-                    <img src="/static/Triangles.png" alt="Triangles">
+                    <img src="/static/Triangles.png" alt="Triangles"> <br>
 
                 {% elif choice.question_text == "Use f(x) and g(x) to find g(x) - f(x)."%} 
                     <p>Here, f(x) = -x + 5 and g(x) = 3x + 2.</p>
+                
+                {% elif choice.question_text == "Rewrite the equation below using only the Symmetric Property of Equality" %}
+                    <p>3x + 2x + 1 = 4x + 8</p>
                 {% endif %}
-                <p id="questions">{{ choice.question_text }}</p><br>
+                
+                
 
                 {% for answer in choice.answer_set.all %}
                     <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
                     <label for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br>
-                    <label id="answers" for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br>
+                    <!--<label id="answers" for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br>-->
                 {% endfor %}
                 {% endwith %}
             {% endfor %}
