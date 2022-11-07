@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="{$ url 'polls:answers' question.id %}" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend><h1>{{ subject.subject_text }}</h1></legend>
+            {% if error_message %}<p>Consider this marker 4.5, also error: <strong>{{ error_message }}</strong></p>{% endif %}
+            {% for choice in subject.question_set.all %}
+                <!--<input type="radio" name="answer_choice" id="answer_choice{{ forloop.counter }}" value="{{ answer.id }}">-->
+                <h4>{{ choice.question_text }}</h4>
+                <p>The correct answer is: {{ choice.answers }}</p><br>
+                
+                <!--{% for answer in choice.answer_set.all %}
+                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                    <label for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br>
+                {% endfor %}-->
+            {% endfor %}
+        </fieldset>
+        <input type="submit" value="See Answers">
+    
+    </form>
+</body>
+</html>
+

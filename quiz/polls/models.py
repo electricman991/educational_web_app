@@ -1,6 +1,9 @@
 from django.db import models
 from django_random_queryset import RandomManager
 
+
+# Answers must be written out within 200 characters of text.
+# An answer may be pulled randomly for any question as a false answer.
 class Subject(models.Model):
     objects = RandomManager()
     subject_text = models.CharField(max_length=200)

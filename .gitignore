@@ -1,8 +1,2 @@
 /quiz/quiz/key.secret
 /quiz/config.py
-/quiz/polls/__pycache__/__init__.cpython-310.pyc
-/quiz/polls/__pycache__/admin.cpython-310.pyc
-/quiz/polls/__pycache__/apps.cpython-310.pyc
-/quiz/polls/__pycache__/models.cpython-310.pyc
-/quiz/polls/__pycache__/urls.cpython-310.pyc
-/quiz/polls/__pycache__/views.cpython-310.pyc
