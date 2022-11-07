@@ -2,3 +2,4 @@
 /quiz/config.py
 /quiz/quiz/__pycache__
 /quiz/polls/__pycache__
+/quiz/polls/migrations/__pycache__
