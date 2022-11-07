@@ -7,6 +7,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
+import random
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
@@ -17,11 +18,16 @@ class IndexView(generic.ListView):
         return Subject.objects.order_by('-pub_date')[:5]
 
 
-class DetailView(generic.DetailView):
-    model = Subject
+class DetailView(generic.ListView):
+    model = Subject, Question
     template_name = 'polls/detail.html'
-
-
+    context_object_name = 'question_list'
+    
+    def get_queryset(self):
+        data = Question.objects.filter(subject=self.kwargs['pk'])
+        
+        return data.random(10)
+    
 class ResultsView(generic.DetailView):
     model = Subject
     template_name = 'polls/results.html'
