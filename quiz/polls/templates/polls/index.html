@@ -1,4 +1,7 @@
+{% extends "polls/base.html" %}
+{% block content %}
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <link rel="stylesheet" type='text/css' href="{% static 'index.css'%}" />
+
     <title>Document</title>
 </head>
 <body>
@@ -20,7 +24,7 @@
     {% if latest_question_list %}
     <ul>
     {% for subject in latest_question_list %}
-    <li><a href="{% url 'polls:detail' subject.id %}"><button>{{ subject.subject_text }}</button></a></li>
+    <li><a href="{% url 'polls:detail' subject.id subject.id %}"><button>{{ subject.subject_text }}</button></a></li>
     {% endfor %}
     </ul>
 {% else %}
@@ -28,4 +32,4 @@
 {% endif %}
 </body>
 </html>
-
+{% endblock content %}

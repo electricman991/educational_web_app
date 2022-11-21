@@ -26,3 +26,10 @@ class Answer(models.Model):
     answer_text = models.CharField(max_length=200)
     def __str__(self):
         return self.answer_text
+
+class Url(models.Model):
+    objects = RandomManager()
+    url = models.URLField(max_length=200)
+    number = models.IntegerField()
+    def __str__(self):
+        return self.url
