@@ -17,10 +17,7 @@
                 <h4>{{ choice.question_text }}</h4>
                 <p>The correct answer is: {{ choice.answers }}</p><br>
                 
-                <!--{% for answer in choice.answer_set.all %}
-                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-                    <label for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br>
-                {% endfor %}-->
+                
             {% endfor %}
         </fieldset>
         <input type="submit" value="See Answers">
