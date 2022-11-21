@@ -26,11 +26,24 @@ class DetailView(generic.ListView, FormView):
     context_object_name = 'question_list'
     success_url = 'polls:detail/<int:pk>'
     form_class = NameForm
-    
+    test_array = []
     
     def get_queryset(self):
         data = Question.objects.filter(subject=self.kwargs['pk'])
-        return data.random(1)
+        if len(self.test_array) == 10:
+            return HttpResponseRedirect(reverse('polls:answers', args=(self.kwargs['pk'],)))
+
+        same = False
+        while same == False:
+            new_question = data.random(1)
+            if new_question in self.test_array:
+                same = False
+            else:
+                self.test_array.append(new_question)
+                same = True
+
+        print(self.test_array)
+        return self.test_array[-1]
 
     def get_context_data(self, *args, **kwargs):
         kwargs.update(
