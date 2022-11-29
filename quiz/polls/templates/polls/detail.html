@@ -11,17 +11,19 @@
     <title>Document</title>
 </head>
 <body>
-    <form method="post", enctype="multipart/form-data">
-        
+   
+    <form  method="post" enctype="multipart/form-data">
+    
         {% csrf_token %}
         
         <fieldset >
             <legend id="topic"><h1 id="topic">{{ subject.subject_text }}</h1></legend>
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-            {{ form.as_p }} 
-            {% with count=1 %}
+
+            {{ form.as_p }}
             
-            <!--{% for choice in question_list %} -->
+            
+            {% for choice in question_list %} 
 
                 <p>Question{{ forloop.counter }}/10</p> 
 
@@ -47,22 +49,32 @@
                 
 
                 {% for answer in choice.answer_set.all %}
-                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ answer.id }}">
                     <label for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br>
                     <!--<label id="answers" for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br>-->
                 {% endfor %}
                 
-            {% endfor %}
-            <!--</form> -->
+            {% endfor %} 
+              
              
-            {% endwith %}
+           
         </fieldset>
-        <input type="submit" value="Previous" name="previous">
-        <input type="submit" value="Submit" name="submit">
-        <input type="submit" value="Next" name="next">
-
+        <input type="submit" value="Previous" name="previous" >
         
-    
+        <input type="submit" value="Submit" name="submit">
+        {% for question in question_list %}
+        <input type="hidden" name="question" value="{{ question.id }}">
+            {% for answer in question.answer_set.all %}
+                {% for choice in answer.choice_set.all %}
+                    <input type="hidden" name="answer" value="{{ choice.id }}">
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+        
+        
+        
+        <input type="submit" value="Next" name="next"> 
+        
     </form>
     
 </body>

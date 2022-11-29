@@ -1,15 +1,16 @@
 from django.shortcuts import render
 
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Subject, Question, Answer, Url
+from .models import Subject, Question, Answer, Choice, Counter
 from django.template import loader
 from django.http import Http404
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from .forms import NameForm
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, UpdateView
 import random
+
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
@@ -21,65 +22,125 @@ class IndexView(generic.ListView):
 
 
 class DetailView(generic.ListView, FormView):
-    model = Subject, Question, Url
+    model = Question, Subject, Answer, Choice
     template_name = 'polls/detail.html'
     context_object_name = 'question_list'
-    success_url = 'polls:detail/<int:pk>'
+    success_url = 'answers'
     form_class = NameForm
     test_array = []
+    object_list = {}
+    object = Question.objects.all()
+    context={}
     
     def get_queryset(self):
         data = Question.objects.filter(subject=self.kwargs['pk'])
-        if len(self.test_array) == 10:
-            return HttpResponseRedirect(reverse('polls:answers', args=(self.kwargs['pk'],)))
-
-        same = False
+        #new_question = data.random(1)
+       # print(new_question)
+        
+        '''if new_question in self.test_array:
+            new_question = data.random(1)
+        self.test_array.append(new_question)'''
+        
+        '''same = False
         while same == False:
             new_question = data.random(1)
             if new_question in self.test_array:
                 same = False
             else:
                 self.test_array.append(new_question)
-                same = True
+                same = True'''
 
-        print(self.test_array)
-        return self.test_array[-1]
+        #print(len(self.test_array))
+        return data.random(1)
 
-    def get_context_data(self, *args, **kwargs):
-        kwargs.update(
-            user=self.request.session.get('user', {'is_authenticated': False})
-        )
-        context = super().get_context_data(*args, **kwargs)
-
-        context['random'] = self.kwargs['random']
-        numbers = []
-        numbers.append(context['random'])
-        print(len(numbers))
-        return context
-
-    def form_valid(self, form):
+    def form_valid(self, form, *args, **kwargs):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
        
-        self.number = random.randint(1, 10)
+        #print(self.request.POST)
+        form = NameForm(self.request.POST)
+        
         if 'next' in self.request.POST:
+
+            question = get_object_or_404(Question, pk=self.request.POST['question'])
+            print(question.id)
+            print(self.request.POST.get('question'))
+            if str(question.id) in self.request.POST.get('question'):
+                question = get_object_or_404(Question, pk=self.request.POST.get('question'))
+
+            try:
+                
+                selected_choice = question.answer_set.get(pk=self.request.POST.get('choice'))
+                #print(selected_choice)
+            except (KeyError, Answer.DoesNotExist):
+                # Redisplay the question voting form.
+                return render(self.request, 'polls/detail.html', {
+                    'question': question,
+                    'error_message': "You didn't select a choice.",
+                })
+            else:
+                #print("bye")
+                if Choice.objects.all().count() >= 10:
+                    Choice.objects.all().delete()
+                    Counter.objects.filter(pk=1).update(counter=0)
+                answer = Answer.objects.get(pk=selected_choice.id)
+                #print(self.request.POST.get('choice'))
+                q = Choice.objects.create(choice_text=selected_choice.answer_text, question=answer)
+                q.save()
+                #point = get_object_or_404(Choice, question_id=self.request.POST['choice'])
+                #print(selected_choice.answer_text)
+                #print(question.answers)
+                if selected_choice.answer_text == question.answers:
+                    c = Counter.objects.get(pk=1)
+                    c.counter += 1
+                    c.save()
             
-            #data = Url.objects.create(url=self.request.POST['next'], number=self.number)
-            #data.save()
-            #Url.objects.filter(number=self.number).number 
-            
-            #print(self.numbers)
-            return HttpResponseRedirect(reverse('polls:detail', args=(self.kwargs['pk'], self.number)))
+                # Always return an HttpResponseRedirect after successfully dealing
+                # with POST data. This prevents data from being posted twice if a
+                # user hits the Back button.
+
+                if Choice.objects.all().count() >= 10:
+                    del self.test_array[:]
+                
+                    return HttpResponseRedirect(reverse('polls:results', args=(self.kwargs['pk'], )))
+
+            return HttpResponseRedirect(reverse('polls:detail', args=(self.kwargs['pk'], )))
+        
         elif 'submit' in self.request.POST:
-            return HttpResponseRedirect(reverse('polls:answers', args=(self.kwargs['pk'],)))
+
+            question = get_object_or_404(Question, pk=self.request.POST['question'])
+
+            try:
+                
+                selected_choice = question.answer_set.get(pk=self.request.POST['choice'])
+                print(selected_choice)
+
+            except (KeyError, Answer.DoesNotExist):
+                # Redisplay the question voting form.
+                return render(self.request, 'polls/detail.html', {
+                    'question': question,
+                    'error_message': "You didn't select a choice.",
+                })
+            else:
+                
+                if Choice.objects.all().count() >= 10:
+                    Choice.objects.all().delete()
+                answer = Answer.objects.get(pk=selected_choice.id)
+                q = Choice.objects.create(choice_text=selected_choice.answer_text, question=answer)
+                q.save()
+                # Always return an HttpResponseRedirect after successfully dealing
+                # with POST data. This prevents data from being posted twice if a
+                # user hits the Back button.
+                return HttpResponseRedirect(reverse('polls:results', args=(self.kwargs['pk'],) ))
+
+        elif 'retry' in self.request.POST:
+
+            return HttpResponseRedirect(reverse('polls:detail', args=(self.kwargs['pk'],)))
+
         elif 'previous' in self.request.POST:
             
-            Url.objects.filter(url=self.request.POST['previous'], number=self.number)
-            return HttpResponseRedirect(reverse('polls:detail', args=(self.kwargs['pk'], self.number)))
+            return HttpResponseRedirect(reverse('polls:detail', args=(self.kwargs['pk'],)))
             
-           # return HttpResponseRedirect(reverse('polls:detail', args=(self.kwargs['pk'], previous)))
-            
-        #form.get_question()
         return super().form_valid(form)
 
     
@@ -88,29 +149,24 @@ class ResultsView(generic.DetailView):
     model = Subject
     template_name = 'polls/results.html'
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['counter'] = Counter.objects.get(pk=1)
+        context['choice'] = Choice.objects.all()
+        
+        
+        return context
 
-def answers(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    try:
-        selected_choice = question.answer_set.get(pk=request.POST['choice'])
-    except (KeyError, Answer.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(request, 'polls/detail.html', {
-            'question': question,
-            'error_message': "You didn't select a choice.",
-        })
-    else:
-        selected_choice.answer_text 
-        selected_choice.answers = request.POST['answers']
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 
 class seeAllAnswers(generic.DetailView):
     model = Subject
     template_name = 'polls/answers.html'
+    
+
+
+    
+
+
 
 

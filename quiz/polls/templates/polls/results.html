@@ -1,9 +1,39 @@
-<h1>{{ subject.subject_text }}</h1>
+{% extends "polls/base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'results.css'%}" />
+</head>
+<body>
+    <h1>{{ subject.subject_text }}</h1>
 
 <ul>
-{% for choice in subject.choice_set.all %}
-    <li>{{ question.choice_text }} -- {{ question.answer }} answers{{ answer.answer_text }}</li>
-{% endfor %}
+
+    {% for question in subject.question_set.all %}
+
+        {% for answer in question.answer_set.all %}
+            {% for choice in answer.choice_set.all %}
+            
+            <li> Question: {{ question.question_text }}  </li>
+            <p>Your Answer: {{ choice.choice_text }}</p>
+            <p>Correct Answer: {{ question.answers }}</p>
+            
+            {% endfor %}
+        {% endfor %}
+
+    {% endfor %}
+    <p class="points"> Points: {{ counter }}/{{ choice.count }} </p>
 </ul>
 
-<a href="{% url 'polls:detail' question.id % }">Vote again?</a>
+<a href="{% url 'polls:detail' subject.id % }">Retry?</a>
+    
+</body>
+</html>
+
+{% endblock %}

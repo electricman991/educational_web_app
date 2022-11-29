@@ -24,7 +24,9 @@
     {% if latest_question_list %}
     <ul>
     {% for subject in latest_question_list %}
-    <li><a href="{% url 'polls:detail' subject.id subject.id %}"><button>{{ subject.subject_text }}</button></a></li>
+   
+    <li><a href="{% url 'polls:detail' subject.id %}"><button class="subject">{{ subject.subject_text }}</button></a></li>
+    
     {% endfor %}
     </ul>
 {% else %}
