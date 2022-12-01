@@ -16,14 +16,14 @@
 <ul>
 
     {% for question in subject.question_set.all %}
-
+        
         {% for answer in question.answer_set.all %}
             {% for choice in answer.choice_set.all %}
-            
-            <li> Question: {{ question.question_text }}  </li>
-            <p>Your Answer: {{ choice.choice_text }}</p>
-            <p>Correct Answer: {{ question.answers }}</p>
-            
+            <div>
+            <div> <p id="question"><b> Question: </b>{{ question.question_text }} </p> </div>
+            <div id="answers"> <div id="youranswer"><p>Your Answer:</p> {{ choice.choice_text }} </div>
+            <div id="correct"><p>Correct Answer:</p> {{ question.answers }}</div></div>
+            <br><br></div>
             {% endfor %}
         {% endfor %}
 
