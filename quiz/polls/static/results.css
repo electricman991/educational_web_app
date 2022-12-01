@@ -14,3 +14,29 @@ p {
     padding: 0;
     
 }
+
+#question {
+    
+    margin-bottom: 5px;
+}
+
+#answers {
+    margin-left: 50px;
+}
+#correct{
+    border-radius: 25px;
+    background: #6BAA75;
+    padding: 20px;
+    width: 500px;
+    height: 140px;
+    color: black;
+}
+#youranswer{
+    border-radius: 25px;
+    background :#C95D63;
+    padding: 20px;
+    width: 500px;
+    height: 140px;
+    color: black;
+    
+}
