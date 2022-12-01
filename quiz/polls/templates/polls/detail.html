@@ -46,8 +46,6 @@
                     <p>3x + 2x + 1 = 4x + 8</p>
                 {% endif %}
                 
-                
-
                 {% for answer in choice.answer_set.all %}
                     <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ answer.id }}">
                     <label for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br>
@@ -64,6 +62,7 @@
         <input type="submit" value="Submit" name="submit">
         {% for question in question_list %}
         <input type="hidden" name="question" value="{{ question.id }}">
+        
             {% for answer in question.answer_set.all %}
                 {% for choice in answer.choice_set.all %}
                     <input type="hidden" name="answer" value="{{ choice.id }}">
@@ -76,7 +75,9 @@
         <input type="submit" value="Next" name="next"> 
         
     </form>
-    
+    <form method = "GET">
+        <input type="hidden" name="question" value="{{ question.id }}">
+    </form>
 </body>
 </html>
 {% endblock content %}

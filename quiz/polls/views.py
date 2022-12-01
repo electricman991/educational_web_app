@@ -20,6 +20,12 @@ class IndexView(generic.ListView):
         """Return the last five published questions."""
         return Subject.objects.order_by('-pub_date')[:5]
 
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        print(Question.objects.filter(subject=1).random(1).get(subject_id=1))
+        context['question'] = Question.objects.filter(subject=1).random(1).get(subject_id=1)
+        return context
+
 
 class DetailView(generic.ListView, FormView):
     model = Question, Subject, Answer, Choice
@@ -36,6 +42,7 @@ class DetailView(generic.ListView, FormView):
         data = Question.objects.filter(subject=self.kwargs['pk'])
         #new_question = data.random(1)
        # print(new_question)
+        #Choice.objects.create(new_question=new_question)
         
         '''if new_question in self.test_array:
             new_question = data.random(1)
@@ -57,16 +64,18 @@ class DetailView(generic.ListView, FormView):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
        
-        #print(self.request.POST)
+       
         form = NameForm(self.request.POST)
         
         if 'next' in self.request.POST:
-
+            
             question = get_object_or_404(Question, pk=self.request.POST['question'])
             print(question.id)
             print(self.request.POST.get('question'))
             if str(question.id) in self.request.POST.get('question'):
                 question = get_object_or_404(Question, pk=self.request.POST.get('question'))
+
+            #if question.id == Choice.objects.get(fk=self.request.POST.get('question')).id:
 
             try:
                 
@@ -104,7 +113,7 @@ class DetailView(generic.ListView, FormView):
                 
                     return HttpResponseRedirect(reverse('polls:results', args=(self.kwargs['pk'], )))
 
-            return HttpResponseRedirect(reverse('polls:detail', args=(self.kwargs['pk'], )))
+            return HttpResponseRedirect(reverse('polls:detail', args=(self.kwargs['pk'], self.request.POST.get('question'))))
         
         elif 'submit' in self.request.POST:
 
@@ -156,8 +165,6 @@ class ResultsView(generic.DetailView):
         
         
         return context
-
-
 
 class seeAllAnswers(generic.DetailView):
     model = Subject
