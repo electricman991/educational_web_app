@@ -33,50 +33,47 @@ class DetailView(generic.ListView, FormView):
     context_object_name = 'question_list'
     success_url = 'answers'
     form_class = NameForm
-    test_array = []
+    #test_array = []
     object_list = {}
     object = Question.objects.all()
     context={}
     
     def get_queryset(self):
         data = Question.objects.filter(subject=self.kwargs['pk'])
-        #new_question = data.random(1)
-       # print(new_question)
-        #Choice.objects.create(new_question=new_question)
-        
-        '''if new_question in self.test_array:
-            new_question = data.random(1)
-        self.test_array.append(new_question)'''
-        
-        '''same = False
-        while same == False:
-            new_question = data.random(1)
-            if new_question in self.test_array:
-                same = False
-            else:
-                self.test_array.append(new_question)
-                same = True'''
 
-        #print(len(self.test_array))
+        #return a random question from the queryset
         return data.random(1)
+
+    def get_context_data(self, **kwargs):
+        # get context data that can be used in the template
+        context = super().get_context_data(**kwargs)
+       
+        context['counter'] = Counter.objects.get(pk=1)
+        context['choices'] = Choice.objects.all()
+        context['questions'] = Question.objects.filter(subject=self.kwargs['pk']).random(10)
+        return context
 
     def form_valid(self, form, *args, **kwargs):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
        
-       
         form = NameForm(self.request.POST)
         
         if 'next' in self.request.POST:
             
-            question = get_object_or_404(Question, pk=self.request.POST['question'])
+            question = get_object_or_404(Question, pk=self.request.POST.get('question'))
+            #question = self.test_array[0][0]
+            #print(self.test_array)
+            #if self.test_array[0]:
+                #self.test_array.pop()
             print(question.id)
             print(self.request.POST.get('question'))
+            
             if str(question.id) in self.request.POST.get('question'):
                 question = get_object_or_404(Question, pk=self.request.POST.get('question'))
 
             #if question.id == Choice.objects.get(fk=self.request.POST.get('question')).id:
-
+            #print(self.request.POST)
             try:
                 
                 selected_choice = question.answer_set.get(pk=self.request.POST.get('choice'))
@@ -88,7 +85,7 @@ class DetailView(generic.ListView, FormView):
                     'error_message': "You didn't select a choice.",
                 })
             else:
-                #print("bye")
+                
                 if Choice.objects.all().count() >= 10:
                     Choice.objects.all().delete()
                     Counter.objects.filter(pk=1).update(counter=0)
@@ -109,7 +106,7 @@ class DetailView(generic.ListView, FormView):
                 # user hits the Back button.
 
                 if Choice.objects.all().count() >= 10:
-                    del self.test_array[:]
+                    #del self.test_array[:]
                 
                     return HttpResponseRedirect(reverse('polls:results', args=(self.kwargs['pk'], )))
 
@@ -134,9 +131,16 @@ class DetailView(generic.ListView, FormView):
                 
                 if Choice.objects.all().count() >= 10:
                     Choice.objects.all().delete()
+                    Counter.objects.filter(pk=1).update(counter=0)
+
                 answer = Answer.objects.get(pk=selected_choice.id)
                 q = Choice.objects.create(choice_text=selected_choice.answer_text, question=answer)
                 q.save()
+
+                if selected_choice.answer_text == question.answers:
+                    c = Counter.objects.get(pk=1)
+                    c.counter += 1
+                    c.save()
                 # Always return an HttpResponseRedirect after successfully dealing
                 # with POST data. This prevents data from being posted twice if a
                 # user hits the Back button.
@@ -162,6 +166,7 @@ class ResultsView(generic.DetailView):
         context = super().get_context_data(*args, **kwargs)
         context['counter'] = Counter.objects.get(pk=1)
         context['choice'] = Choice.objects.all()
+        context['question'] = Question.objects.get(pk=self.kwargs['pk'])
         
         
         return context

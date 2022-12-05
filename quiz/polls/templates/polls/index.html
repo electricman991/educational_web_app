@@ -25,7 +25,7 @@
     <ul>
     {% for subject in latest_question_list %}
    
-    <li><a href="{% url 'polls:detail' subject.id question.id %}"><button class="subject{{forloop.counter}}">{{ subject.subject_text }}</button></a></li>
+    <li><a href="{% url 'polls:detail' subject.id question.id %}"><button id="subject{{forloop.counter}}" class="subject">{{ subject.subject_text }}</button></a></li>
     
     {% endfor %}
     </ul>

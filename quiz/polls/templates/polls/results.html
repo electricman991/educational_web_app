@@ -19,11 +19,23 @@
         
         {% for answer in question.answer_set.all %}
             {% for choice in answer.choice_set.all %}
+            {% if choice.choice_text == question.answers %}
+
             <div>
-            <div> <p id="question"><b> Question: </b>{{ question.question_text }} </p> </div>
-            <div id="answers"> <div id="youranswer"><p>Your Answer:</p> {{ choice.choice_text }} </div>
-            <div id="correct"><p>Correct Answer:</p> {{ question.answers }}</div></div>
-            <br><br></div>
+                <div> <p id="question"><b> Question: </b>{{ question.question_text }} </p> </div>
+                <div id="answers">
+                <div id ="correct"><p>Correct Answer:</p> {{ question.answers }}</div></div>
+                <br><br></div>
+
+            {% else %} 
+            <div>
+                <div> <p id="question"><b> Question: </b>{{ question.question_text }} </p> </div>
+                <div id="answers"> <div id="youranswer"><p>Your Answer:</p> {{ choice.choice_text }} </div>
+                <div id="correct"><p>Correct Answer:</p> {{ question.answers }}</div></div>
+                <br><br></div>
+
+            {% endif %}
+            
             {% endfor %}
         {% endfor %}
 
@@ -31,7 +43,10 @@
     <p class="points"> Points: {{ counter }}/{{ choice.count }} </p>
 </ul>
 
-<a href="{% url 'polls:detail' subject.id % }">Retry?</a>
+<form method="GET" action="{% url 'polls:detail' subject.id question.id %}">
+    <button type="submit" class="button">Try Again</button>
+</form>
+
     
 </body>
 </html>

@@ -1,9 +1,10 @@
 li {
-    font-size: 40px;
+    font-size: 100px;
     text-align: justify;
     list-style-position: inside;
-    padding: 20px;
-    margin-left: 330px;
+    padding: 50px;
+    margin-left: 180px;
+    list-style: none;
 }
 
 body {
@@ -16,8 +17,21 @@ button {
 }
 
 .subject {
-    font-size: 50px;
+    font-size: 75px;
     
+}
+
+#subject1 {
+    background-color: blue;
+
+}
+
+#subject2 {
+    background-color: red;
+}
+
+#subject3 {
+    background-color: green;
 }
 
 #title {

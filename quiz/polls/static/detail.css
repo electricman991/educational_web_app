@@ -5,8 +5,25 @@
     
 #questions {
         font-size: 35px;
+        background-color: #51AEEC;
+        border-radius: 10px;
+        font-weight: bold;
     }
     
 #answers{
         font-size: 25px;
+        background-color: #4BE10B;
+        border-radius: 20px;
     }
+
+#submit {
+        font-size: 25px;
+        border-radius: 10px;
+    }
+
+#submit:hover, #submit:active {
+        background: #30A4CE;
+        color: black;
+    }
+
+
