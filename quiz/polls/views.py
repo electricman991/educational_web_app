@@ -9,7 +9,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 from .forms import NameForm
 from django.views.generic.edit import FormView, UpdateView
-import random
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 class IndexView(generic.ListView):
@@ -90,12 +90,10 @@ class DetailView(generic.ListView, FormView):
                     Choice.objects.all().delete()
                     Counter.objects.filter(pk=1).update(counter=0)
                 answer = Answer.objects.get(pk=selected_choice.id)
-                #print(self.request.POST.get('choice'))
+                
                 q = Choice.objects.create(choice_text=selected_choice.answer_text, question=answer)
                 q.save()
-                #point = get_object_or_404(Choice, question_id=self.request.POST['choice'])
-                #print(selected_choice.answer_text)
-                #print(question.answers)
+                
                 if selected_choice.answer_text == question.answers:
                     c = Counter.objects.get(pk=1)
                     c.counter += 1
@@ -106,7 +104,7 @@ class DetailView(generic.ListView, FormView):
                 # user hits the Back button.
 
                 if Choice.objects.all().count() >= 10:
-                    #del self.test_array[:]
+                    
                 
                     return HttpResponseRedirect(reverse('polls:results', args=(self.kwargs['pk'], )))
 
@@ -146,13 +144,6 @@ class DetailView(generic.ListView, FormView):
                 # user hits the Back button.
                 return HttpResponseRedirect(reverse('polls:results', args=(self.kwargs['pk'],) ))
 
-        elif 'retry' in self.request.POST:
-
-            return HttpResponseRedirect(reverse('polls:detail', args=(self.kwargs['pk'],)))
-
-        elif 'previous' in self.request.POST:
-            
-            return HttpResponseRedirect(reverse('polls:detail', args=(self.kwargs['pk'],)))
             
         return super().form_valid(form)
 
@@ -161,6 +152,36 @@ class DetailView(generic.ListView, FormView):
 class ResultsView(generic.DetailView):
     model = Subject
     template_name = 'polls/results.html'
+   
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['counter'] = Counter.objects.get(pk=1)
+        context['choice'] = Choice.objects.all()
+        context['question'] = Question.objects.get(pk=self.kwargs['pk'])
+
+
+        return context
+
+    '''def form_valid(self, form, *args, **kwargs):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        form=NameForm(self.request.GET)
+        print(self.request.GET)
+        
+        if 'retry' in self.request.GET:
+            return HttpResponseRedirect(reverse('polls:detail', args=(self.kwargs['pk'],)))
+        
+        return super().form_valid(form)'''
+
+'''class SaveResultsView(LoginRequiredMixin, generic.ListView):
+    model = Counter
+    template_name = 'polls/save.html'
+    success_url = reverse_lazy('polls:save_results')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form) 
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -168,12 +189,21 @@ class ResultsView(generic.DetailView):
         context['choice'] = Choice.objects.all()
         context['question'] = Question.objects.get(pk=self.kwargs['pk'])
         
-        
         return context
 
-class seeAllAnswers(generic.DetailView):
-    model = Subject
-    template_name = 'polls/answers.html'
+    def get_queryset(self):
+        return Counter.objects.get(pk=1)
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        return HttpResponseRedirect(success_url)''' 
+
+
+def about(request):
+
+    return render(request, 'polls/about.html', {'title': 'About'})
     
 
 

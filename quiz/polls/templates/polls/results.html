@@ -6,12 +6,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Results</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'results.css'%}" />
 </head>
 <body>
     <h1>{{ subject.subject_text }}</h1>
+    <br>
+
+    <p class="result-instructions">Here is a list of the questions that you answered with the correct answer shown in green and your answer in red. If you only see 
+    the correct answer, then you got the question correct. If you see both your answer and the correct answer, then you got the question
+    wrong. Your score is shown at the bottom of the page.
+    </p>
+    <br>
 
 <ul>
 
@@ -44,7 +51,8 @@
 </ul>
 
 <form method="GET" action="{% url 'polls:detail' subject.id question.id %}">
-    <button type="submit" class="button">Try Again</button>
+    <input type="submit" name="retry" value="Retry">
+    <!--<input type="submit" name="save" value="Save Results" > -->
 </form>
 
     

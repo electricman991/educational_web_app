@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
     <link rel="stylesheet" href="{% static 'detail.css'%}" />
-    <title>Document</title>
+    <title>Questions</title>
 </head>
 <body>
    
@@ -22,8 +22,12 @@
             
             
             {% for choice in question_list %} 
+
+                <p class="question-instructions">Select the answer that you belive to be correct and click the next button to go to the next question. If you want to check your progress
+                    you can click the submit button which will show you which ones you got correct.
+                </p>
                 
-                <p>Question {{ choices.count }}/10</p> 
+                <p class="counter">Question {{ choices.count }}/10</p> 
                 <p id="questions">{{ choice.question_text }}</p><br>
                 
 
@@ -45,8 +49,8 @@
                 {% for answer in choice.answer_set.all %}
                     <!-- create input button that returns post data -->
                     
-                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ answer.id}}"  >
-                    <label for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br>
+                    <input type="radio" name="choice" id="choice{{forlopp.counter}}" value="{{ answer.id}}" >
+                    <label for="choice{{forlopp.counter}}" id="choice">{{ answer.answer_text }}</label><br>
                 {% endfor %}
                 
             {% endfor %} 

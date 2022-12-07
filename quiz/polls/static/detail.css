@@ -4,8 +4,8 @@
     }
     
 #questions {
-        font-size: 35px;
-        background-color: #51AEEC;
+        font-size: 40px;
+       
         border-radius: 10px;
         font-weight: bold;
     }
@@ -19,6 +19,8 @@
 #submit {
         font-size: 25px;
         border-radius: 10px;
+        height: 50px;
+        width: 100px;
     }
 
 #submit:hover, #submit:active {
@@ -26,4 +28,36 @@
         color: black;
     }
 
+.counter {
+    font-size: 25px;
+}
 
+#next:hover, #next:active {
+    background: #30A4CE;
+    color: black;
+    
+}
+
+#next {
+    font-size: 25px;
+    border-radius: 10px;
+    float: right;
+    height: 50px;
+    width: 100px;
+}
+
+.question-instructions {
+    font-size: 30px;
+    color : blue;
+}
+
+#choice {
+    font-size: 35px;
+    border-radius: 20px;
+}
+
+input[type=radio] {
+    
+    transform: scale(1.75);
+    
+}
