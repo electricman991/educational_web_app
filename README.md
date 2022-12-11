@@ -24,11 +24,12 @@ When the user selects a category that they want to study from they are then redi
 
 # Useful Websites
 
-* [Web Site Name](http://url.link.goes.here)
-* [Web Site Name](http://url.link.goes.here)
+* [Django documentation](https://docs.djangoproject.com/en/4.1/topics/)
+* [Useful Features for Django Shell](https://www.nickmccullum.com/useful-features-django-shell/#inserting-data-into-the-database)
+
 
 # Future Work
 
 * Add the ablility to save the users score 
-* Item 2
-* Item 3
+* Improve the layout of the website 
+* Add additional subjects to study / connect to API to pull questions from
